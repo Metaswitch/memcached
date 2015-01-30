@@ -11,6 +11,10 @@ BEGIN {
     push(@exempted, glob("doc/xml2rfc/*.xsl"));
     push(@exempted, glob("m4/*backport*m4"));
     push(@exempted, glob(".*project"));
+    push(@exempted, glob("debian/**/*"));
+    push(@exempted, glob("debian/*"));
+    push(@exempted, glob(".pc/**/.timestamp"));
+    push(@exempted, glob(".pc/*"));
     my %exempted_hash = map { $_ => 1 } @exempted;
 
     my @stuff = split /\0/, `git ls-files -z -c -m -o --exclude-standard`;
