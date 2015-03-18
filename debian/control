@@ -1,7 +1,7 @@
 Source: memcached
 Section: web
 Priority: optional
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Maintainer: Project Clearwater Maintainers <maintainers@projectclearwater.org>
 XSBC-Original-Maintainer: David Martínez Moreno <ender@debian.org>
 Build-Depends: debhelper (>= 6), libevent-dev, quilt (>= 0.46-7)
 Homepage: http://www.danga.com/memcached/
