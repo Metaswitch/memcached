@@ -75,7 +75,7 @@ if(open $etchandle, $etcfile)
             next;
         }
 
-        push @$params, $line;
+        push @$params, split(/ +/, $line);
     }
 
 }else{
@@ -83,7 +83,6 @@ if(open $etchandle, $etcfile)
 }
 
 push @$params, "-u root" unless(grep "-u", @$params);
-$params = join " ", @$params;
 
 if(-e $pidfile)
 {
@@ -112,7 +111,7 @@ if($pid == 0)
     # must fork again now that tty is closed
     $pid = fork();
     if ($pid == 0) {
-        exec "$memcached $params";
+        exec $memcached, @$params;
     }else{
         if(open PIDHANDLE,">$pidfile")
         {
