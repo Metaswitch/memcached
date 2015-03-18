@@ -1,3 +1,9 @@
+memcached (1.6.00-0clearwater0.1) precise; urgency=low
+
+  * Don't start in a shell.
+
+ -- Project Clearwater Maintainers <maintainers@projectclearwater.org>  Wed, 18 Mar 2015 16:15:30 -0000
+
 memcached (1.6.00-0clearwater0) precise; urgency=low
 
   * New upstream release.
