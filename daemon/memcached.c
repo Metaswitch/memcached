@@ -2442,7 +2442,8 @@ static void ship_tap_log(conn *c) {
                 bodylen += info.nbytes;
             }
             msg.mutation.message.header.request.bodylen = htonl(bodylen);
-            msg.mutation.message.body.item.flags = htonl(info.flags);
+            /* flags is opaque and should not be byte swapped. */
+            msg.mutation.message.body.item.flags = info.flags;
             msg.mutation.message.body.item.expiration = htonl(info.exptime);
             msg.mutation.message.body.tap.enginespecific_length = htons(nengine);
             msg.mutation.message.body.tap.ttl = ttl;
