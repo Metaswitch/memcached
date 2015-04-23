@@ -1,6 +1,7 @@
 memcached (1.6.00-0clearwater0.2) precise; urgency=low
 
   * Correct endianess of flags field on TAP_MUTATE messages.
+  * Correct expiration on TAP_MUTATE messages to be an absolute time (rather than being relative to server start).
 
  -- Project Clearwater Maintainers <maintainers@projectclearwater.org>  Mon, 13 Apr 2015 18:22:30 +0100
 
