@@ -1,3 +1,9 @@
+memcached (1.6.00-0clearwater0.3) precise; urgency=low
+
+  * Set START_PREFIX to use the signaling namespace.
+
+ -- Project Clearwater Maintainers <maintainers@projectclearwater.org>  Mon, 13 Apr 2015 18:22:30 +0100
+
 memcached (1.6.00-0clearwater0.2) precise; urgency=low
 
   * Correct endianess of flags field on TAP_MUTATE messages.
