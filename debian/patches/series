@@ -1,5 +1,6 @@
 01_init_script_additions.patch
 02_manpage_additions.patch
 03_fix_ftbfs4hurd.patch
+04_no_start_prefix_for_status.patch
 50_add_init_retry.patch
 60_fix_racey_test.patch
