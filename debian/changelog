@@ -1,3 +1,9 @@
+memcached (1.6.00-0clearwater0.5) precise; urgency=low
+
+  * Rework handling of init scripts.
+
+ -- Project Clearwater Maintainers <maintainers@projectclearwater.org>  Mon, 28 Aug 2015 18:18:30 +0100
+
 memcached (1.6.00-0clearwater0.4) precise; urgency=low
 
   * Remove START_PREFIX from status command.

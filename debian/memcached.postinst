@@ -33,6 +33,12 @@ configure)
             mkdir -p /etc
             cp /usr/share/memcached/memcached.conf.default /etc/memcached.conf
     fi
+
+    # Install /etc/init.d/memcached in the postinst, because clearwater-memcached previously edited
+    # it with a script, and now the Debian infrastructure won't change it.
+    cp /usr/share/memcached/scripts/memcached-init /etc/init.d/memcached
+    service memcached restart
+
     ;;
 esac
 
