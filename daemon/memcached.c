@@ -7470,12 +7470,15 @@ int main (int argc, char **argv) {
     /* create the listening socket, bind it, and init */
     if (settings.socketpath == NULL) {
         const char *portnumber_filename = getenv("MEMCACHED_PORT_FILENAME");
-        char temp_portnumber_filename[PATH_MAX];
+        char *temp_portnumber_filename = NULL;
+        size_t len;
         FILE *portnumber_file = NULL;
 
         if (portnumber_filename != NULL) {
+            len = strlen(portnumber_filename)+4+1;
+            temp_portnumber_filename = malloc(len);
             snprintf(temp_portnumber_filename,
-                     sizeof(temp_portnumber_filename),
+                     len,
                      "%s.lck", portnumber_filename);
 
             portnumber_file = fopen(temp_portnumber_filename, "a");
@@ -7513,6 +7516,7 @@ int main (int argc, char **argv) {
         if (portnumber_file) {
             fclose(portnumber_file);
             rename(temp_portnumber_filename, portnumber_filename);
+            free(temp_portnumber_filename);
         }
     }
 
