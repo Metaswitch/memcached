@@ -16,4 +16,9 @@ fi
 
     rm -f /var/run/memcached.pid
 
+if [ "$1" = "deconfigure" ]
+    then
+    rm -f /etc/init.d/memcached
+fi
+
 #DEBHELPER#

@@ -72,7 +72,6 @@ install: build
 	#install -d $(SCRIPTS)
 	install -m 744 $(CURDIR)/scripts/start-memcached $(SCRIPTS)
 	install -m 744 $(CURDIR)/scripts/memcached-tool $(SCRIPTS)
-	install -m 755 $(CURDIR)/scripts/memcached-init $(CURDIR)/debian/memcached.init
 
 
 # Build architecture-independent files here.
