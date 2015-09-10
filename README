@@ -1,5 +1,35 @@
 Super fast totally awesome distributed memory object caching daemon.
 
+## Clearwater Code Management
+
+The build infrastructure for memcached is slightly different than for other Clearwater code
+repositories, in order to keep a separation between the upstream code and the Debian packaging.
+
+There are two main branches:
+
+- clearwater-upstream, which is our version of the memcached code
+- clearwater-debian, which is clearwater-upstream plus the Debian packaging code
+
+If you're making a fix to Debian packaging infrastructure, make it directly in the clearwater-debian
+branch.
+
+If you're making any other fix, make it in clearwater-upstream and then merge that branch into
+clearwater-debian.
+
+In either case, you should bump the version numer in debian/changelog.
+
+## Building
+
+To build this package, check out clearwater-debian and run:
+
+`git-buildpackage -uc -us --git-ignore-branch`
+
+This will generate the .deb files (but you'll have to copy them manually - there's no REPO_DIR or
+REPO_SERVER option).
+
+
+## Upstream info
+
 Requires a client to fully utilize, which you may research at the wiki:
 
    http://www.memcached.org/wiki
