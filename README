@@ -22,7 +22,10 @@ In either case, you should bump the version numer in debian/changelog.
 
 To build this package, check out clearwater-debian and run:
 
-`git-buildpackage -uc -us --git-ignore-branch`
+```
+./config/autorun.sh
+git-buildpackage -uc -us --git-ignore-branch
+```
 
 This will generate the .deb files (but you'll have to copy them manually - there's no REPO_DIR or
 REPO_SERVER option).
