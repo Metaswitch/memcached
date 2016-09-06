@@ -24,7 +24,7 @@ To build this package, check out clearwater-debian and run:
 
 ```
 ./config/autorun.sh
-git-buildpackage -uc -us --git-ignore-branch
+git-buildpackage -uc -us --git-ignore-branch --git-ignore-new
 ```
 
 This will generate the .deb files (but you'll have to copy them manually - there's no REPO_DIR or
