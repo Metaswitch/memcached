@@ -58,3 +58,8 @@ Makefile.in
 TAGS
 cscope.out
 tags
+build-stamp
+debian/files
+debian/memcached
+debian/*.log
+debian/memcached.substvars
