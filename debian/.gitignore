@@ -1,0 +1,4 @@
+files
+memcached.debhelper.log
+memcached.substvars
+memcached/
