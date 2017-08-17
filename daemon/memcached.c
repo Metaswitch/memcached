@@ -216,6 +216,7 @@ static rel_time_t realtime(const time_t exptime) {
  */
 static time_t abstime(const rel_time_t exptime)
 {
+    if (exptime == 0) return 0;
     return process_started + exptime;
 }
 
