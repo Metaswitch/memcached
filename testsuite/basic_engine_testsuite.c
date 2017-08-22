@@ -412,7 +412,17 @@ static enum test_result get_item_info_test(ENGINE_HANDLE *h, ENGINE_HANDLE_V1 *h
     assert(strcmp(key,ii.key) == 0);
     assert(ii.nkey == strlen(key));
     assert(ii.nbytes == 1);
-    assert(ii.exptime == exp);
+    /*
+     * Memcached stores expiry times relative to the process start time, so
+     * there is a chance the stored expiry time is one greater than the expiry
+     * time set if the process starts sufficiently close to a second
+     * boundary, and we pass that boundary before we call allocate().
+     *
+     * This is an artifact of how memcached works (not a bug) so we make a
+     * pragmatic fix of matching exp or exp + 1 so that this test doesn't fail
+     * intermittently.
+     */
+    assert((ii.exptime == exp) || (ii.exptime == exp + 1));
     h1->release(h, NULL, test_item);
     return SUCCESS;
 }
