@@ -187,8 +187,17 @@ sub new_memcached {
 
     # unix domain sockets
     if ($args =~ /-s (\S+)/) {
-        sleep 1;
         my $filename = $1;
+        for (my $i = 0; $i < 30; $i++) {
+            # Sleep for up to 30s waiting for the socket to exist
+            if ( -e $filename) {
+                # File exists, so break out
+                last;
+            }
+
+            sleep 1;
+        }
+
         my $conn = IO::Socket::UNIX->new(Peer => $filename) ||
             croak("Failed to connect to unix domain socket: $! '$filename'");
 
