@@ -1,4 +1,7 @@
 files
+memcached-dbg.debhelper.log
+memcached-dbg.substvars
+memcached-dbg/
 memcached.debhelper.log
 memcached.substvars
 memcached/
