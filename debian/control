@@ -32,4 +32,5 @@ Architecture: any
 Depends: memcached (= ${binary:Version})
 Section: debug
 Recommends: gdb
+Priority: extra
 Description: Debugging symbols for memcached
