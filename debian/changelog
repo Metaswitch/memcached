@@ -1,3 +1,9 @@
+memcached (1.6.00-0clearwater0.6) precise; urgency=low
+
+  * Add debug package containing debug symbols
+
+ -- Project Clearwater Maintainers <maintainers@projectclearwater.org>  Tue, 19 Aug 2017 14:44:00 +0100
+
 memcached (1.6.00-0clearwater0.5) precise; urgency=low
 
   * Rework handling of init scripts.
