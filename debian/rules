@@ -90,7 +90,7 @@ binary-arch: build install
 	dh_installinit
 	dh_installman
 	dh_link
-	dh_strip
+	dh_strip --dbg-package=memcached-dbg
 	dh_compress
 	dh_fixperms
 	dh_installdeb

@@ -26,3 +26,10 @@ Description: A high-performance memory object caching system
  of the specific application. Traditionally this has been used in mod_perl
  apps to avoid storing large chunks of data in Apache memory, and to share
  this burden across several machines.
+
+Package: memcached-dbg
+Architecture: any
+Depends: memcached (= ${binary:Version})
+Section: debug
+Recommends: gdb
+Description: Debugging symbols for memcached
