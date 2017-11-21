@@ -31,6 +31,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <sys/prctl.h>
 
 static inline void item_set_cas(const void *cookie, item *it, uint64_t cas) {
     settings.engine.v1->item_set_cas(settings.engine.v0, cookie, it, cas);
@@ -7369,6 +7370,11 @@ int main (int argc, char **argv) {
             settings.extensions.logger->log(EXTENSION_LOG_WARNING, NULL,
                     "failed to assume identity of user %s: %s\n", username,
                     strerror(errno));
+            exit(EX_OSERR);
+        }
+        if (prctl(PR_SET_DUMPABLE, 1) < 0) {
+            settings.extensions.logger->log(EXTENSION_LOG_WARNING, NULL,
+                    "failed to set dumpable flag to ensure core dumps are possible");
             exit(EX_OSERR);
         }
     }
