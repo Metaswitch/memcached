@@ -7374,7 +7374,8 @@ int main (int argc, char **argv) {
         }
         if (prctl(PR_SET_DUMPABLE, 1) < 0) {
             settings.extensions.logger->log(EXTENSION_LOG_WARNING, NULL,
-                    "failed to set dumpable flag to ensure core dumps are possible");
+                    "failed to set dumpable flag to ensure core dumps are possible: %s\n",
+                    strerror(errno));
             exit(EX_OSERR);
         }
     }
