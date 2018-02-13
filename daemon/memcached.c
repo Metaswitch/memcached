@@ -280,6 +280,13 @@ static int add_msghdr(conn *c)
     assert(c != NULL);
 
     if (c->msgsize == c->msgused) {
+        if (c->msgsize == 0) {
+            /* msgsize should always be larger than MSG_LIST_INITIAL, which is
+             * larger than zero. We check regardless, for safety and to satisfy
+             * the static analyser.
+             */
+            return -1;
+        }
         msg = realloc(c->msglist, c->msgsize * 2 * sizeof(struct msghdr));
         if (! msg)
             return -1;
@@ -911,7 +918,6 @@ static int add_iov(conn *c, const void *buf, int len) {
         if (m->msg_iovlen == IOV_MAX ||
             (limit_to_mtu && c->msgbytes >= UDP_MAX_PAYLOAD_SIZE)) {
             add_msghdr(c);
-            m = &c->msglist[c->msgused - 1];
         }
 
         if (ensure_iov_space(c) != 0)
@@ -2167,7 +2173,15 @@ static void process_bin_complete_sasl_auth(conn *c) {
                 "%d: mech: ``%s'' with %d bytes of data\n", c->sfd, mech, vlen);
     }
 
+    /* If this header is included, the sasl_server_* functions are #define-d to
+     * the literal 1, in which case the value of challenge is unused. In this
+     * case, we do not assign it a value to avoid static analysis issues.
+     */
+    #ifdef SASL_DEFS_H
+    const char *challenge = NULL;
+    #else
     const char *challenge = vlen == 0 ? NULL : (stmp->data + nkey);
+    #endif
 
     int result=-1;
 
@@ -4017,7 +4031,6 @@ static char *get_suffix_buffer(conn *c) {
     return suffix;
 }
 
-/* ntokens is overwritten here... shrug.. */
 static inline char* process_get_command(conn *c, token_t *tokens, size_t ntokens, bool return_cas) {
     char *key;
     size_t nkey;
@@ -4163,7 +4176,7 @@ static inline char* process_get_command(conn *c, token_t *tokens, size_t ntokens
          * of tokens.
          */
         if(key_token->value != NULL) {
-            ntokens = tokenize_command(key_token->value, tokens, MAX_TOKENS);
+            tokenize_command(key_token->value, tokens, MAX_TOKENS);
             key_token = tokens;
         }
 
@@ -6619,6 +6632,11 @@ static void unregister_extension(extension_type_t type, void *extension)
             EXTENSION_DAEMON_DESCRIPTOR *prev = NULL;
             EXTENSION_DAEMON_DESCRIPTOR *ptr = settings.extensions.daemons;
 
+            if (ptr == NULL) {
+                // No daemon extensions are registered.
+                break;
+            }
+
             while (ptr != NULL && ptr != extension) {
                 prev = ptr;
                 ptr = ptr->next;
@@ -6646,6 +6664,11 @@ static void unregister_extension(extension_type_t type, void *extension)
         {
             EXTENSION_ASCII_PROTOCOL_DESCRIPTOR *prev = NULL;
             EXTENSION_ASCII_PROTOCOL_DESCRIPTOR *ptr = settings.extensions.ascii;
+
+            if (ptr == NULL) {
+                // No ASCII protocol extensions are registered.
+                break;
+            }
 
             while (ptr != NULL && ptr != extension) {
                 prev = ptr;

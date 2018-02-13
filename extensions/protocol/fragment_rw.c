@@ -154,7 +154,8 @@ EXTENSION_ERROR_CODE memcached_extensions_initialize(const char *config,
     }
 
     if (config != NULL) {
-        size_t rop, wop;
+        size_t rop = 0;
+        size_t wop = 0;
         struct config_item items[] = {
             { .key = "r",
               .datatype = DT_SIZE,
