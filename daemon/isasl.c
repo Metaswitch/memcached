@@ -340,7 +340,6 @@ int sasl_server_start(sasl_conn_t *conn,
     int rv = SASL_FAIL;
     *serverout = "";
     *serveroutlen = 0;
-    printf("%p", challenge);
 
     if(strcmp(mech, "PLAIN") == 0) {
         // The clientin string looks like "[authzid]\0username\0password"

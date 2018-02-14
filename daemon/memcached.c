@@ -2172,15 +2172,15 @@ static void process_bin_complete_sasl_auth(conn *c) {
         settings.extensions.logger->log(EXTENSION_LOG_DEBUG, c,
                 "%d: mech: ``%s'' with %d bytes of data\n", c->sfd, mech, vlen);
     }
+    
+    const char *challenge = NULL;
 
     /* If this header is included, the sasl_server_* functions are #define-d to
      * the literal 1, in which case the value of challenge is unused. In this
      * case, we do not assign it a value to avoid static analysis issues.
      */
-    #ifdef SASL_DEFS_H
-    const char *challenge = NULL;
-    #else
-    const char *challenge = vlen == 0 ? NULL : (stmp->data + nkey);
+    #ifndef SASL_DEFS_H
+    challenge = vlen == 0 ? NULL : (stmp->data + nkey);
     #endif
 
     int result=-1;
