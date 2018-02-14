@@ -2172,7 +2172,7 @@ static void process_bin_complete_sasl_auth(conn *c) {
         settings.extensions.logger->log(EXTENSION_LOG_DEBUG, c,
                 "%d: mech: ``%s'' with %d bytes of data\n", c->sfd, mech, vlen);
     }
-    
+
     const char *challenge = NULL;
 
     /* If this header is included, the sasl_server_* functions are #define-d to
