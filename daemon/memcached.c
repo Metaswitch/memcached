@@ -281,9 +281,8 @@ static int add_msghdr(conn *c)
 
     if (c->msgsize == c->msgused) {
         if (c->msgsize == 0) {
-            /* msgsize should always be larger than MSG_LIST_INITIAL, which is
-             * larger than zero. We check regardless, for safety and to satisfy
-             * the static analyser.
+            /* msgsize is always larger than MSG_LIST_INITIAL, which is larger
+             * than zero. We check regardless, to satisfy the static analyser.
              */
             return -1;
         }
@@ -2176,7 +2175,7 @@ static void process_bin_complete_sasl_auth(conn *c) {
     const char *challenge = NULL;
 
     /* If this header is included, the sasl_server_* functions are #define-d to
-     * the literal 1, in which case the value of challenge is unused. In this
+     * be the literal 1, in which case the value of challenge is unused. In this
      * case, we do not assign it a value to avoid static analysis issues.
      */
     #ifndef SASL_DEFS_H
