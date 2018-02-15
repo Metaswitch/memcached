@@ -132,12 +132,12 @@ static int mock_parse_config(const char *str, struct config_item items[], FILE *
  */
 
 static void *mock_new_independent_stats(void) {
-    struct mockstats *mockstats = calloc(sizeof(mockstats),1);
+    struct mock_stats *mockstats = calloc(sizeof(struct mock_stats),1);
     return mockstats;
 }
 
 static void mock_release_independent_stats(void *stats) {
-    struct mockstats *mockstats = stats;
+    struct mock_stats *mockstats = stats;
     free(mockstats);
 }
 
@@ -183,6 +183,11 @@ static void mock_unregister_extension(extension_type_t type, void *extension)
         {
             EXTENSION_DAEMON_DESCRIPTOR *prev = NULL;
             EXTENSION_DAEMON_DESCRIPTOR *ptr = extensions.daemons;
+
+            if (ptr == NULL) {
+                // No daemon extensions are registered
+                break;
+            }
 
             while (ptr != NULL && ptr != extension) {
                 prev = ptr;

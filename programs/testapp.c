@@ -316,8 +316,8 @@ static char *get_module(const char *module) {
     static char buffer[1024];
 
     assert(getcwd(buffer, sizeof(buffer)));
-    strcat(buffer, "/.libs/");
-    strcat(buffer, module);
+    strncat(buffer, "/.libs/", sizeof(buffer) - strlen(buffer) - 1);
+    strncat(buffer, module, sizeof(buffer) - strlen(buffer) - 1);
     assert(access(buffer, R_OK) == 0);
     return buffer;
 }
@@ -343,10 +343,10 @@ static pid_t start_server(in_port_t *port_out, bool daemon, int timeout) {
     remove(pid_file);
 
     char engine[1024];
-    strcpy(engine, get_module("default_engine.so"));
+    strncpy(engine, get_module("default_engine.so"), sizeof(engine));
 
     char blackhole[1024];
-    strcpy(blackhole, get_module("blackhole_logger.so"));
+    strncpy(blackhole, get_module("blackhole_logger.so"), sizeof(blackhole));
 
     char fragmentrw[1024];
     sprintf(fragmentrw, "%s,r=%u;w=%u", get_module("fragment_rw_ops.so"),
@@ -2000,33 +2000,38 @@ static enum test_return test_binary_pipeline_hickup(void)
     size_t buffersize = 65 * 1024;
     void *buffer = malloc(buffersize);
     int ii;
+    enum test_return rc;
 
     pthread_t tid;
     int ret;
     allow_closed_read = true;
     hickup_thread_running = true;
+
     if ((ret = pthread_create(&tid, NULL,
                               binary_hickup_recv_verification_thread, NULL)) != 0) {
         fprintf(stderr, "Can't create thread: %s\n", strerror(ret));
-        return TEST_FAIL;
+        rc = TEST_FAIL;
+    } else {
+
+        /* Allow the thread to start */
+        usleep(250);
+
+        srand((int)time(NULL));
+        for (ii = 0; ii < 2; ++ii) {
+            test_binary_pipeline_hickup_chunk(buffer, buffersize);
+        }
+
+        /* send quitq to shut down the read thread ;-) */
+        size_t len = raw_command(buffer, buffersize, PROTOCOL_BINARY_CMD_QUITQ,
+                                 NULL, 0, NULL, 0);
+        safe_send(buffer, len, false);
+
+        pthread_join(tid, NULL);
+        rc = TEST_PASS;
     }
 
-    /* Allow the thread to start */
-    usleep(250);
-
-    srand((int)time(NULL));
-    for (ii = 0; ii < 2; ++ii) {
-        test_binary_pipeline_hickup_chunk(buffer, buffersize);
-    }
-
-    /* send quitq to shut down the read thread ;-) */
-    size_t len = raw_command(buffer, buffersize, PROTOCOL_BINARY_CMD_QUITQ,
-                             NULL, 0, NULL, 0);
-    safe_send(buffer, len, false);
-
-    pthread_join(tid, NULL);
     free(buffer);
-    return TEST_PASS;
+    return rc;
 }
 
 static enum test_return test_binary_verbosity(void) {
@@ -2293,7 +2298,7 @@ static enum test_return test_issue_101(void) {
         assert(stat == 0);
     } else {
         sock = connect_server("127.0.0.1", port, false);
-        ret = test_binary_noop();
+        test_binary_noop();
         close(sock);
         exit(0);
     }
