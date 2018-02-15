@@ -18,7 +18,7 @@
 #define hashmask(n) (hashsize(n)-1)
 
 ENGINE_ERROR_CODE assoc_init(struct default_engine *engine) {
-    engine->assoc.primary_hashtable = calloc(hashsize(engine->assoc.hashpower), sizeof(void *));
+    engine->assoc.primary_hashtable = calloc(hashsize(engine->assoc.hashpower), sizeof(hash_item *));
     return (engine->assoc.primary_hashtable != NULL) ? ENGINE_SUCCESS : ENGINE_ENOMEM;
 }
 
@@ -78,7 +78,7 @@ static void *assoc_maintenance_thread(void *arg);
 static void assoc_expand(struct default_engine *engine) {
     engine->assoc.old_hashtable = engine->assoc.primary_hashtable;
 
-    engine->assoc.primary_hashtable = calloc(hashsize(engine->assoc.hashpower + 1), sizeof(void *));
+    engine->assoc.primary_hashtable = calloc(hashsize(engine->assoc.hashpower + 1), sizeof(hash_item *));
     if (engine->assoc.primary_hashtable) {
         engine->assoc.hashpower++;
         engine->assoc.expanding = true;
